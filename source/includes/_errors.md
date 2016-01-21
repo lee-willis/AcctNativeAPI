@@ -8,4 +8,3 @@ Error Code | Meaning
 100 | Invalid URL String
 200 | Improperly formatted key/value pair
 
-
