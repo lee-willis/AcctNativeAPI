@@ -1,14 +1,13 @@
 ---
-title: API Reference
+title: Gro APIs
 
 language_tabs:
-  - shell
-  - ruby
-  - python
+  - iOS
+
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='http://www.grobanking.com/contact-gro/'>Contact Gro</a>
+  - <a href='https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html#//apple_ref/doc/uid/TP40007072-CH6-SW1'>Apple URL Schemes Programming Guide</a>
 
 includes:
   - errors
@@ -16,153 +15,166 @@ includes:
 search: true
 ---
 
+# Target Audience
+
+This API is intended for development resources well versed in mobile application development and integration.
+
+
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Gro Account Opening Native API!  This document describes the methods that enable you to integrate the Gro Account Opening Native Application to your institutions mobile banking platform.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+The areas to the right include code samples.  Currently only iOS integration is supported, but development for Android and Windows Mobile is underway. 
 
-This example API documentation page was created with [Slate](http://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This document details four methods for initializing and opening the Gro Account Opening Native Application.  The primary means of invoking the application through your mobile banking platform is through the use of a registered url scheme.  The Gro application is installed with the registered scheme "groacct://".
 
-# Authentication
+For details on inter-app communication using url schemes, please visit the App Programming Guide for iOS.
 
-> To authorize, use this code:
 
-```ruby
-require 'kittn'
+# Initialize Gro Account Opening
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+## OpenApp
 
-```python
-import kittn
+```c++
 
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
+(void)buttonPressed:(UIButton *)button
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  NSString *customURL = @"groacct://open.acct";
+
+  if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:customURL]])
+  {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:customURL]];
+  }
+  else
+  {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"URL error"
+                              message:[NSString stringWithFormat:@"No custom URL defined for %@", customURL]
+                              delegate:self cancelButtonTitle:@"Ok" 
+                              otherButtonTitles:nil];
+    [alert show];
+  }
+
+}
+
+```
+
+
+
+Open the Gro Account Opening application (nothing pre-populated)
+
+
+### Sample URL 
+`groacct://open.acct?productID=24&productID=122`
+
+
+##OpenAppWithProducts
+Open the Gro Account Opening Native App with specific products pre-selected in the shopping cart.
+
+
+```c++
+ (void)buttonPressed:(UIButton *)button
+{
+  NSString *customURL = @"groacct://open.acct?productID=24&productID=122";
+
+  if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:customURL]])
+  {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:customURL]];
+  }
+  else
+  {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"URL error"
+                              message:[NSString stringWithFormat:@"No custom URL defined for %@", customURL]
+                              delegate:self cancelButtonTitle:@"Ok" 
+                              otherButtonTitles:nil];
+    [alert show];
+  }
+
 }
 ```
 
-This endpoint retrieves a specific kitten.
 
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
+### Sample URL 
+`groacct://open.acct?productID=24&productID=122`
 
-### HTTP Request
+### URL Parameters
+Parameter | Description
+--------- | -----------
+productID | Unique Identifier of a financial product such as a specific bank account
 
-`GET http://example.com/kittens/<ID>`
+
+## OpenAppSSONoToken
+
+Open the Gro Account opening app with applicant personal information pre-populated.
+
+If a user is already authenticated through the mobile application, the Gro Account Opening application can be invoked and passed application values that will appear pre-populated in the workflow pages. Free form text values that have spaces should be passed with spaces replaced by %20
+
+
+```c++
+ (void)buttonPressed:(UIButton *)button
+{
+  NSString *customURL = @"groacct://open.acct?email=bob@example.com?phone=5555555555?Address1=100%20Sesame%20Street";
+
+  if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:customURL]])
+  {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:customURL]];
+  }
+  else
+  {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"URL error"
+                              message:[NSString stringWithFormat:@"No custom URL defined for %@", customURL]
+                              delegate:self cancelButtonTitle:@"Ok" 
+                              otherButtonTitles:nil];
+    [alert show];
+  }
+
+}
+
+```
+
+
+
+### Sample URL scheme
+
+`groacct://open.acct?email='bob@example.com?phone=5555555555?Address1=100%20Sesame%20Street`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+email | Applicant's email address
+phone | Applicant's phone number (digits only, no dashes)
+firstName | Applicant's first name
+lastName | Applicant's last name
+middle | applicants middle name or initial
+Address1 | Address 1 line
+Address2 | Address 2 line
+City | City 
+State | State (2 character value)
+Zip | Zip Code
+
+## OpenAppSSOWithToken
+
+With this method, A SAML token is passed to the Gro Account Opening Application.
+The application will then use the token to communicate with the specified server to retrieve and pre-populate applicant informatoin
+
+
+```c++
+ Place code here
+```
+
+
+
+### Sample URL scheme
+
+`groacct://thisIsaPlaceHolder`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+Place Holder | The below is not accurate
+SAML Token | Applicant's email address
+Server | hostname of the SSO server
+
+
 
