@@ -44,76 +44,31 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="target-audience">Target Audience</h1>
+        <h1 id="groacct-framework">GroAcct.Framework</h1>
+
+<p>Welcome to the Gro Account Opening API Framework.  This document describes the means of integrating the Gro Account Opening solution into a mobile banking platform.  This API is in BETA and subject to change based on the outcome of early implementation efforts.  Currently only iOS integration is supported, but development for Android and Windows is underway.</p>
+
+<p>The GroAcct.Framework comes packages with a header file  (GroAcct.h) which will expose one method for initializing and and rendering the application.  During the execution of the account opening process, the framework will make calls to Gro web services.  The mobile banking platform may need to be configured accordingly to allow such traffic.  </p>
+
+<h1 id="target-audience">Target Audience</h1>
 
 <p>This API is intended for development resources well versed in mobile application development and integration.</p>
 
-<h1 id="introduction">Introduction</h1>
+<h1 id="showgroacct">ShowGroAcct</h1>
 
-<p>Welcome to the Gro Account Opening API!  This document describes the means  to integrate the Gro Account Opening Native Libraries into a mobile banking platform.</p>
+<p>The GroAcct.Framework exposes one method, ShowGroAcct.  The method accepts a UIViewContoller object as input.  The account opening content will be rendered inside of the view controller that is passed into the method and initialized with the provided set of configuration parameters. </p>
 
-<p>Currently only iOS integration is supported, but development for Android and Windows is underway. </p>
+<p>The ShowGroAcct method is an overloaded, static method with two options for supplying  configuration parameters.  One method is to pass in a string of keyValue pairs seperated by an ampersand.  The second is to initialize a [[[[placeholder]]]] object of key-value pairs.</p>
 
-<h1 id="groacct-class">GroAcct Class</h1>
+<p><code class="prettyprint">void ShowGroAcct(UIViewContoller mwContainer, string config)</code></p>
 
-<p>The GroAcct class library allows for initialization and rendering of the Gro Account opening solution.  An instantiated GroAcct object will ultimately return a UIViewController subclass which should be added to the view hiearchy of the parent view container.  The class library exposes properties and methods that allow the UIViewController and its root view to be configured and rendered propertly.  Additionally data level properties are provided to pre-configure the Account opening workflow.  Code examples are provided of the most common scenarios. </p>
+<p><code class="prettyprint">void ShowGroAcct(UIViewContoller mwContainer, Map configMap) [[Placeholder, to be defined]]</code> </p>
 
-<h1 id="groacct-ui-control">GroAcct - UI Control</h1>
+<p>The ShowGroAcct method is void and returns no values.  When the Gro Account Opening proces has terminated the application will close inside of the provided view controller returning control to the mobile bank framework through the viewDidDissapear event [[Need to discuss this]].</p>
 
-<p>The following properties define the intial rendering characteristis of the UIViewController and underlying root view. </p>
+<h2 id="configuration-parameters">Configuration Parameters</h2>
 
-<h2 id="frame">frame</h2>
-
-<p><code class="prettyprint">@property(nonatomic) CGRect frame</code></p>
-
-<p>Set the initial frame of the root view.  This rectangle defines the size and position of the view in its superview’s coordinate system. You use this rectangle during layout operations to size and position the view. Setting this property changes the point specified by the center property and the size in the bounds rectangle accordingly. The coordinates of the frame rectangle are always specified in points.</p>
-
-<h2 id="center">center</h2>
-
-<p><code class="prettyprint">@property(nonatomic) CGPoint center</code></p>
-
-<p>Set the intial center of the root view.  The center is specified within the coordinate system of its superview and is measured in points. Setting this property changes the values of the frame properties accordingly.</p>
-
-<h2 id="alpha">alpha</h2>
-
-<p><code class="prettyprint">@property(nonatomic) CGFloat alpha</code></p>
-
-<p>Set alpha of root view. The value of this property is a floating-point number in the range 0.0 to 1.0, where 0.0 represents totally transparent and 1.0 represents totally opaque. This value affects only the current view and does not affect any of its embedded subviews.</p>
-
-<h2 id="headertransparent">headerTransparent</h2>
-
-<p><code class="prettyprint">@property(nonatomic) Boolean headerTransparent</code></p>
-
-<p>Default is false.  If set to true the top banner of the pages in the Gro Account Opening workflow will appear transparent.</p>
-
-<h2 id="footervisible">footerVisible</h2>
-
-<p><code class="prettyprint">@property(nonatomic) Boolean footerTransparent</code></p>
-
-<p>Default is tue.  If set to false the footer will not appear at the bottom of the screen.</p>
-
-<h1 id="gro-acct-workflow">Gro Acct - Workflow</h1>
-
-<p>The following properties and method set pre-fill values and other attributes of the Gro Account Opening Workflow</p>
-
-<h2 id="productlist">productList</h2>
-
-<p>place holder, add correct objective c code here</p>
-
-<p><code class="prettyprint">@proprety string array[] productList</code>
-<code class="prettyprint">@property string productList</code></p>
-
-<p>The product list property will set the default products that will appear in the product showcase.  The property can be set as an array of string with each element in the array representing a product code or a string of key value pairs can be set a follows &lsquo;productID=24&amp;productID=122&rsquo;</p>
-
-<h2 id="skipsms">skipSMS</h2>
-
-<p><code class="prettyprint">@property(nonatomic) Boolean skipSMS</code></p>
-
-<p>This property will skip the SMS validation step in the workflow if set to true.  Set to false by default</p>
-
-<h2 id="personal-information">Personal Information</h2>
-
-<p>The following string properties can be set to pre-populate data elements for single sign on situations, where the user has been authenticated through the mobile banking platform.</p>
+<p>Below is the list of configuration parameters, all values are optional.  </p>
 
 <table><thead>
 <tr>
@@ -122,12 +77,20 @@
 </tr>
 </thead><tbody>
 <tr>
+<td>ssoToken</td>
+<td>Single sign on token</td>
+</tr>
+<tr>
+<td>memberID</td>
+<td>Membership number of the applicant</td>
+</tr>
+<tr>
 <td>ssn</td>
-<td>applicant&rsquo;s ssn</td>
+<td>Applicant&rsquo;s ssn</td>
 </tr>
 <tr>
 <td>birthdate</td>
-<td>applicant&rsquo;s DOB mm/dd/yyyy</td>
+<td>Applicant&rsquo;s DOB mm/dd/yyyy</td>
 </tr>
 <tr>
 <td>email</td>
@@ -159,69 +122,60 @@
 </tr>
 <tr>
 <td>city</td>
-<td>city</td>
+<td>City of Address</td>
 </tr>
 <tr>
 <td>state</td>
-<td>state (2 character value)</td>
+<td>State of Address (2 character value)</td>
 </tr>
 <tr>
 <td>zip</td>
-<td>zip Code</td>
+<td>Zip Code of Address</td>
 </tr>
 <tr>
-<td>idNumber</td>
-<td>driver&rsquo;s license or other ID number.</td>
+<td>dlNumber</td>
+<td>driver&rsquo;s license number.</td>
+</tr>
+<tr>
+<td>skipSMS</td>
+<td>true or false string value</td>
+</tr>
+<tr>
+<td>productID</td>
+<td>This value can appear multiple times and defines what products will be defaulted into the product show case</td>
+</tr>
+<tr>
+<td>skipIDCapture</td>
+<td>true or false string value</td>
 </tr>
 </tbody></table>
 
-<p>Alternatively the setPersonalInformation method can be invoked which accepts a string of key value pairs seperated by an ampersand.</p>
-
-<p><code class="prettyprint">setPersonalInformation(&#39;email=gro@example.com&amp;firstName=&#39;John&#39;)</code></p>
-
-<h1 id="open-application">Open Application</h1>
-
-<p>The methods below initialize the Gro Account Opening application and return a UIViewController subclass.</p>
-
-<h2 id="openapp">openApp()</h2>
-
-<p><code class="prettyprint">UIViewController openApp()</code></p>
-
-<p>This method with no parameters will initialize the Gro Account Opening application with all properties that have been set and return the coresponding UIViewController subclass.</p>
-
-<h2 id="openapp-string-ssotoken">openApp(string ssoToken)</h2>
-
-<p><code class="prettyprint">UIViewController openApp(string SSOToken)</code></p>
-
-<p>This method will pass in a single-sign on token to initialize the application.  The application will take the single sign on token, authenticate to an SSO server an pre-populate personal information of the applicant.  The method will return an UIViewController subclass.</p>
-
-<h1 id="use-cases">Use Cases</h1>
-
-<p>Below are the common use cases for opening the Gro Account Opening solution from a mobile banking application.</p>
+<h1 id="examples">Examples</h1>
 
 <h2 id="open-app-no-data-initialization">Open App - No data initialization</h2>
-<pre class="highlight java"><code><span class="n">GroAcct</span> <span class="n">myApp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GroAcct</span><span class="o">();</span>
-<span class="k">return</span> <span class="n">myApp</span><span class="o">.</span><span class="na">OpenApp</span><span class="o">();</span>
+<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
+
+<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
+
 </code></pre>
 
 <p>Open the Gro Account Opening Native App without any data values pre-populated.</p>
 
 <h2 id="open-app-with-products">Open App - With products</h2>
-<pre class="highlight java"><code><span class="n">GroAcct</span> <span class="n">myApp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GroAcct</span><span class="o">();</span>
-<span class="n">myApp</span><span class="o">.</span><span class="na">productList</span> <span class="o">=</span> <span class="err">'</span><span class="n">productID</span><span class="o">=</span><span class="mi">24</span><span class="o">&amp;</span><span class="n">productID</span><span class="o">=</span><span class="mi">122</span><span class="err">'</span>
-<span class="k">return</span> <span class="n">myApp</span><span class="o">.</span><span class="na">OpenApp</span><span class="o">();</span>
+<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
+
+<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="err">'</span><span class="n">productID</span><span class="o">=</span><span class="mi">24</span><span class="o">&amp;</span><span class="n">productID</span><span class="o">=</span><span class="mi">122</span><span class="err">'</span>
+<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
 </code></pre>
 
 <p>Open the Gro Account Opening Native App with specific products pre-selected in the shopping cart.</p>
 
 <h2 id="open-app-sso-no-token">Open App - SSO no Token</h2>
-<pre class="highlight java"><code>
-<span class="n">GroAcct</span> <span class="n">myApp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GroAcct</span><span class="o">();</span>
-<span class="n">myApp</span><span class="o">.</span><span class="na">ssn</span> <span class="o">=</span> <span class="err">'</span><span class="mi">123454678</span><span class="err">'</span>
-<span class="n">myApp</span><span class="o">.</span><span class="na">firstName</span> <span class="o">=</span> <span class="err">'</span><span class="n">John</span><span class="err">'</span>
-<span class="n">myApp</span><span class="o">.</span><span class="na">LastName</span> <span class="o">=</span> <span class="err">'</span><span class="n">Smith</span><span class="err">'</span>
-<span class="n">mApp</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="err">'</span><span class="n">smith</span><span class="nd">@example</span><span class="o">.</span><span class="na">com</span><span class="err">'</span>
-<span class="n">myApp</span><span class="o">.</span><span class="na">OpenApp</span><span class="o">();</span>
+<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
+
+<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="err">'</span><span class="n">ssn</span><span class="o">=</span><span class="err">'</span><span class="mi">111111111</span><span class="o">&amp;</span><span class="n">email</span><span class="o">=</span><span class="n">jon</span><span class="nd">@example</span><span class="o">.</span><span class="na">com</span><span class="o">&amp;</span><span class="n">firstName</span><span class="o">=</span><span class="err">'</span><span class="n">John</span><span class="err">'</span><span class="o">&amp;</span><span class="n">lastName</span><span class="o">=</span><span class="err">'</span><span class="n">Smith</span><span class="err">'</span>
+<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
 
 </code></pre>
 
