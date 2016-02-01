@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["java"]);
+          setupLanguages(["objective-c"]);
         });
       </script>
   </head>
@@ -28,7 +28,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="java">java</a>
+              <a href="#" data-language-name="objective-c">objective-c</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -38,7 +38,6 @@
       </div>
         <ul class="toc-footer">
             <li><a href='http://www.grobanking.com/contact-gro/'>Contact Gro</a></li>
-            <li><a href='https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html#//apple_ref/doc/uid/TP40007072-CH6-SW1'>Apple URL Schemes Programming Guide</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -46,25 +45,27 @@
       <div class="content">
         <h1 id="groacct-framework">GroAcct.Framework</h1>
 
-<p>Welcome to the Gro Account Opening API Framework.  This document describes the means of integrating the Gro Account Opening solution into a mobile banking platform.  This API is in BETA and subject to change based on the outcome of early implementation efforts.  Currently only iOS integration is supported, but development for Android and Windows is underway.</p>
+<p>Welcome to the Gro Account Opening API Framework.  This document describes the means of integrating the Gro Account Opening solution into a mobile banking platform.  This API is in BETA and subject to change based on the outcome of early implementation efforts.  </p>
 
-<p>The GroAcct.Framework comes packages with a header file  (GroAcct.h) which will expose one method for initializing and and rendering the application.  During the execution of the account opening process, the framework will make calls to Gro web services.  The mobile banking platform may need to be configured accordingly to allow such traffic.  </p>
+<p>Please note that there the mobile banking app may required configuration to interact with the GroAcct.Framework  Currently only iOS integration is supported, but development for Android and Windows is underway.</p>
+
+<p>The GroAcct.Framework comes packages with a header file (GroAcct.h) which will expose one method for initializing and and rendering the application.  During the execution of the account opening process, the framework will make calls to Gro web services.  The mobile banking platform may need to be configured accordingly to allow such traffic.     </p>
 
 <h1 id="target-audience">Target Audience</h1>
 
 <p>This API is intended for development resources well versed in mobile application development and integration.</p>
 
-<h1 id="showgroacct">ShowGroAcct</h1>
+<h1 id="showgroacct">showGroAcct</h1>
 
-<p>The GroAcct.Framework exposes one method, ShowGroAcct.  The method accepts a UIViewContoller object as input.  The account opening content will be rendered inside of the view controller that is passed into the method and initialized with the provided set of configuration parameters. </p>
+<p>The GroAcct.Framework exposes one method, showGroAcct.  The method accepts a UIViewContoller object as input.  The account opening content will be rendered inside of the view controller that is passed into the method and initialized with the provided set of configuration parameters. </p>
 
-<p>The ShowGroAcct method is an overloaded, static method with two options for supplying  configuration parameters.  One method is to pass in a string of keyValue pairs seperated by an ampersand.  The second is to initialize a [[[[placeholder]]]] object of key-value pairs.</p>
+<p>The showGroAcct method is an overloaded, static method with two options for supplying  configuration parameters.  One method is to pass in a string of keyValue pairs seperated by an ampersand.  The second is to initialize an NSDictionary object of key-value pairs.</p>
 
-<p><code class="prettyprint">void ShowGroAcct(UIViewContoller mwContainer, string config)</code></p>
+<p><code class="prettyprint">(void) showGroAcct:(UIViewController *)viewController config:(NSString*)config</code></p>
 
-<p><code class="prettyprint">void ShowGroAcct(UIViewContoller mwContainer, Map configMap) [[Placeholder, to be defined]]</code> </p>
+<p><code class="prettyprint">(void) showGroAcct:(UIViewController *)viewController config:(NSDictionary*)config</code> </p>
 
-<p>The ShowGroAcct method is void and returns no values.  When the Gro Account Opening proces has terminated the application will close inside of the provided view controller returning control to the mobile bank framework through the viewDidDissapear event [[Need to discuss this]].</p>
+<p>The showGroAcct method is void and returns no values.  When the Gro Account Opening proces has terminated the application it will callBack to the mobile native banking application and return control to it. </p>
 
 <h2 id="configuration-parameters">Configuration Parameters</h2>
 
@@ -153,29 +154,36 @@
 <h1 id="examples">Examples</h1>
 
 <h2 id="open-app-no-data-initialization">Open App - No data initialization</h2>
-<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
-
-<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
+<pre class="highlight cpp"><code><span class="cp">#import &lt;GroFramework/GroAcct.h&gt;
+</span>
+<span class="n">NSString</span> <span class="o">*</span><span class="n">config</span> <span class="o">=</span> <span class="n">nil</span><span class="p">;</span>
+<span class="p">[[</span><span class="n">GroAcct</span> <span class="n">gro</span><span class="p">]</span> <span class="n">showGroAcct</span><span class="o">:</span><span class="n">self</span> <span class="n">config</span><span class="o">:</span><span class="n">config</span><span class="p">];</span>
 
 </code></pre>
 
 <p>Open the Gro Account Opening Native App without any data values pre-populated.</p>
 
 <h2 id="open-app-with-products">Open App - With products</h2>
-<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
+<pre class="highlight cpp"><code>
+<span class="cp">#import &lt;GroFramework/GroAcct.h&gt;
+</span>
+<span class="n">NSString</span> <span class="o">*</span><span class="n">config</span> <span class="o">=</span> <span class="err">@</span><span class="s">"productID=24&amp;productID=122"</span><span class="p">;</span>
+<span class="p">[[</span><span class="n">GroAcct</span> <span class="n">gro</span><span class="p">]</span> <span class="n">showGroAcct</span><span class="o">:</span><span class="n">self</span> <span class="n">config</span><span class="o">:</span><span class="n">config</span><span class="p">];</span>
 
-<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="err">'</span><span class="n">productID</span><span class="o">=</span><span class="mi">24</span><span class="o">&amp;</span><span class="n">productID</span><span class="o">=</span><span class="mi">122</span><span class="err">'</span>
-<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
 </code></pre>
 
 <p>Open the Gro Account Opening Native App with specific products pre-selected in the shopping cart.</p>
 
-<h2 id="open-app-sso-no-token">Open App - SSO no Token</h2>
-<pre class="highlight java"><code><span class="n">include</span> <span class="n">GroAcct</span><span class="o">.</span><span class="na">h</span>
-
-<span class="n">string</span> <span class="n">config</span> <span class="o">=</span> <span class="err">'</span><span class="n">ssn</span><span class="o">=</span><span class="err">'</span><span class="mi">111111111</span><span class="o">&amp;</span><span class="n">email</span><span class="o">=</span><span class="n">jon</span><span class="nd">@example</span><span class="o">.</span><span class="na">com</span><span class="o">&amp;</span><span class="n">firstName</span><span class="o">=</span><span class="err">'</span><span class="n">John</span><span class="err">'</span><span class="o">&amp;</span><span class="n">lastName</span><span class="o">=</span><span class="err">'</span><span class="n">Smith</span><span class="err">'</span>
-<span class="n">ShowGroAcct</span><span class="o">(</span><span class="n">myViewController</span><span class="o">,</span> <span class="n">config</span><span class="o">);</span>
+<h2 id="open-app-with-personal-info">Open App - with personal Info</h2>
+<pre class="highlight cpp"><code><span class="cp">#import &lt;GroFramework/GroAcct.h&gt;
+</span>
+<span class="n">NSDictionary</span> <span class="o">*</span><span class="n">config</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span>
+    <span class="err">@</span><span class="s">"ssn"</span> <span class="o">:</span> <span class="err">@</span><span class="s">"111111111"</span><span class="p">,</span>
+    <span class="err">@</span><span class="s">"email"</span> <span class="o">:</span> <span class="err">@</span><span class="s">"jon@example.com"</span><span class="p">,</span>
+    <span class="err">@</span><span class="s">"firstName"</span> <span class="o">:</span> <span class="err">@</span><span class="s">"John"</span><span class="p">,</span>
+    <span class="err">@</span><span class="s">"lastName"</span> <span class="o">:</span> <span class="err">@</span><span class="s">"Smith"</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="p">[[</span><span class="n">GroAcct</span> <span class="n">gro</span><span class="p">]</span> <span class="n">showGroAcct</span><span class="o">:</span><span class="n">self</span> <span class="n">config</span><span class="o">:</span><span class="n">config</span><span class="p">];</span>
 
 </code></pre>
 
@@ -186,7 +194,7 @@
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="java">java</a>
+                <a href="#" data-language-name="objective-c">objective-c</a>
           </div>
       </div>
     </div>
