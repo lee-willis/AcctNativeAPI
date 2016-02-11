@@ -57,7 +57,7 @@
 
 <h1 id="showgroacct">showGroAcct</h1>
 
-<p>The GroAcct.Framework exposes one method, showGroAcct.  The method accepts a UIViewContoller object as input.  The account opening content will be rendered inside of the view controller that is passed into the method and initialized with the provided set of configuration parameters. </p>
+<p>The GroAcct.Framework exposes one method, showGroAcct.  The method accepts a UIViewContoller object (or sub-class object) as input.  If a UINavigationController object is passed to the showGroAcct method, a  pushViewController method will be invoked, otherwise a presentModalViewController will be invoked to bring the account opening content to the foreground.   The account opening content will be  initialized with the provided set of configuration parameters.</p>
 
 <p>The showGroAcct method is an overloaded, static method with two options for supplying  configuration parameters.  One method is to pass in a string of keyValue pairs seperated by an ampersand.  The second is to initialize an NSDictionary object of key-value pairs.</p>
 
@@ -80,6 +80,10 @@
 <tr>
 <td>ssoToken</td>
 <td>Single sign on token</td>
+</tr>
+<tr>
+<td>brandID</td>
+<td>Financial institution identifer</td>
 </tr>
 <tr>
 <td>memberID</td>
